@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { getRandomUser } from "./Utility/api.jsx";
 import InstructorFunc from "./InstructorFunc.jsx";
 
@@ -44,6 +44,11 @@ const CycloPediaFuncPage = () => {
     };
   });
 
+  // const [totalRender, setTotalRender] = useState(0); - Infinite loop in this case, because it will be called on every render.
+  const totalRender = useRef(0);
+  const prevStudentCount = useRef(0);
+  const feedbackInputRef = useRef(null);
+
   const [inputName, setInputName] = useState(() => {
     return "";
   });
@@ -53,6 +58,9 @@ const CycloPediaFuncPage = () => {
 
   useEffect(() => {
     console.log("This will be called on Every render.");
+    // setTotalRender((prevState) => prevState + 1); -- Infinite loop in this case, because it will be called on every render.
+    totalRender.current = totalRender.current + 1;
+    console.log("render " + totalRender.current);
   });
 
   // Replication of componentDidMount from class component.
@@ -94,13 +102,24 @@ const CycloPediaFuncPage = () => {
         };
       });
     };
-    if (state.studentList.length < state.studentCount) {
+    if (prevStudentCount.current < state.studentCount) {
       getUser();
-    } else if (state.studentList.length > state.studentCount) {
+    } else if (prevStudentCount.current > state.studentCount) {
       setState((prevState) => {
         return { ...prevState, studentList: [] };
       });
     }
+    // if (state.studentList.length < state.studentCount) {
+    //   getUser();
+    // } else if (state.studentList.length > state.studentCount) {
+    //   setState((prevState) => {
+    //     return { ...prevState, studentList: [] };
+    //   });
+    // }
+  }, [state.studentCount]);
+
+  useEffect(() => {
+    prevStudentCount.current = state.studentCount;
   }, [state.studentCount]);
 
   useEffect(() => {
@@ -111,6 +130,7 @@ const CycloPediaFuncPage = () => {
 
   useEffect(() => {
     console.log("This will be called on intial/first render/mount");
+    feedbackInputRef.current.focus();
     return () => {
       console.log("This will be called on unmounting");
     };
@@ -157,7 +177,7 @@ const CycloPediaFuncPage = () => {
           <InstructorFunc instructor={state.instructor} />
         ) : null}
       </div>
-
+      <div className="p-3">Total Render : {totalRender.current}</div>
       <div className="p-3">
         <span className="h4 text-success">Feedback</span>
         <br />
@@ -173,6 +193,7 @@ const CycloPediaFuncPage = () => {
         <br />
         <textarea
           value={inputFeedback}
+          ref={feedbackInputRef}
           placeholder="Feedback..."
           onChange={(e) => {
             setInputFeedback(e.target.value);
