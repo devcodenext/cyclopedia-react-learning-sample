@@ -1,17 +1,22 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import Header from "./Components/Layout/Header";
+import CycloPediaClassPage from "./CycloPediaClassPage";
+import CycloPediaFuncPage from "./CycloPediaFuncPage";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
+  <div>
+    <Header />
+    <div className="row text-white">
+      <div className="col-6">
+        <span className="h1 text-warning text-center">Class Component</span>
+        <CycloPediaClassPage />
+      </div>
+      <div className="col-6">
+        <span className="h1 text-warning text-center">Function Component</span>
+        <CycloPediaFuncPage />
+      </div>
+    </div>
+  </div>
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
