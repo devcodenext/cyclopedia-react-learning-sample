@@ -1,40 +1,9 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useId, useRef, useState } from "react";
 import { getRandomUser } from "./Utility/api.jsx";
 import InstructorFunc from "./InstructorFunc.jsx";
 
 const CycloPediaFuncPage = () => {
   // In functional component we do not have constructor.
-
-  // componentDidUpdate = async (previousProps, previousState) => {
-  //   console.log("Component Did Update");
-  //   localStorage.setItem("cyclopedia", JSON.stringify(this.state));
-  //   console.log("Old State - " + previousState.studentCount);
-  //   console.log("New State - " + this.state.studentCount);
-  //   if (previousState.studentCount < this.state.studentCount) {
-  //     const response = await getRandomUser();
-  //     this.setState((prevState) => {
-  //       return {
-  //         studentList: [
-  //           ...prevState.studentList,
-  //           {
-  //             name: response.data.first_name + " " + response.data.last_name,
-  //           },
-  //         ],
-  //       };
-  //     });
-  //   } else if (previousState.studentCount > this.state.studentCount) {
-  //     this.setState((prevState) => {
-  //       return {
-  //         studentList: [],
-  //       };
-  //     });
-  //   }
-  // };
-
-  // componentWillUnmount() {
-  //   console.log("Component Will Unmount");
-  // }
-
   const [state, setState] = useState(() => {
     return {
       instructor: undefined,
@@ -48,6 +17,7 @@ const CycloPediaFuncPage = () => {
   const totalRender = useRef(0);
   const prevStudentCount = useRef(0);
   const feedbackInputRef = useRef(null);
+  const id = useId();
 
   const [inputName, setInputName] = useState(() => {
     return "";
@@ -188,8 +158,10 @@ const CycloPediaFuncPage = () => {
           onChange={(e) => {
             setInputName(e.target.value);
           }}
+          id={`${id}-inputName`}
         ></input>{" "}
-        Value: {inputName}
+        <label htmlFor={`${id}-inputName`}>Name Value: </label>
+        {inputName}
         <br />
         <textarea
           value={inputFeedback}
@@ -198,8 +170,10 @@ const CycloPediaFuncPage = () => {
           onChange={(e) => {
             setInputFeedback(e.target.value);
           }}
+          id={`${id}-inputFeedback`}
         ></textarea>{" "}
-        Value : {inputFeedback}
+        <label htmlFor={`${id}-inputFeedback`}>Feedback Value : </label>
+        {inputFeedback}
         <br />
       </div>
       <div className="p-3">
